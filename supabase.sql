@@ -100,6 +100,16 @@ CREATE TABLE IF NOT EXISTS public.crop_recommendations (
   created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- ─── 7. AUDIT LOG ────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.audit_log (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  admin_id    UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+  action      TEXT NOT NULL,
+  target_id   UUID,
+  details     JSONB,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- =============================================================================
 --  INDEXES
 -- =============================================================================
@@ -108,6 +118,7 @@ CREATE INDEX IF NOT EXISTS idx_alerts_user_time     ON public.alerts (user_id, c
 CREATE INDEX IF NOT EXISTS idx_alerts_user_unread   ON public.alerts (user_id) WHERE is_read = false;
 CREATE INDEX IF NOT EXISTS idx_notifications_user   ON public.notifications (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_fav_locations_user   ON public.favorite_locations (user_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_admin_time ON public.audit_log (admin_id, created_at DESC);
 
 -- =============================================================================
 --  ROW LEVEL SECURITY
@@ -118,6 +129,7 @@ ALTER TABLE public.weather_history      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.alerts               ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.crop_recommendations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.audit_log            ENABLE ROW LEVEL SECURITY;
 
 -- Users can read/update their own profile
 CREATE POLICY "profiles_self" ON public.profiles
