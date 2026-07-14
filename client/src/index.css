@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================
+   Base Styles
+   ========================================== */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-sky-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300;
+    font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+    font-size: clamp(0.875rem, 1.5vw + 0.25rem, 1rem);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+}
+
+/* ==========================================
+   Fluid Typography (outside @layer to override Tailwind utilities)
+   ========================================== */
+h1 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem); line-height: 1.2; }
+h2 { font-size: clamp(1.5rem, 3vw + 0.5rem, 2.25rem); line-height: 1.25; }
+h3 { font-size: clamp(1.125rem, 2vw + 0.25rem, 1.5rem); line-height: 1.3; }
+p { font-size: clamp(0.875rem, 1.5vw + 0.25rem, 1rem); line-height: 1.6; }
+
+/* ==========================================
+   WCAG 2.2 Accessibility
+   ========================================== */
+
+/* Focus visible styles - only show on keyboard navigation */
+:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: #1e40af;
+  color: white;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Button focus styles */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Input focus styles */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+/* High contrast focus for dark mode */
+.dark :focus-visible {
+  outline-color: #60a5fa;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================
+   Component Styles
+   ========================================== */
+@layer components {
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-white/20 dark:border-gray-700/30 rounded-2xl shadow-lg shadow-blue-500/5 dark:shadow-black/20;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:scale-[1.02];
+  }
+
+  /* Modern Button */
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:from-blue-700 hover:to-blue-600 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white/90 dark:bg-gray-700/90 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 text-white font-semibold rounded-xl shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:from-red-700 hover:to-red-600 transition-all duration-300 active:scale-95;
+  }
+
+  /* Input Fields */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm border border-gray-200 dark:border-gray-600 rounded-xl text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full;
+  }
+
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300;
+  }
+
+  /* Loading Skeleton */
+  .skeleton {
+    @apply bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 animate-pulse rounded-lg;
+  }
+
+  /* Weather Icon Container */
+  .weather-icon-container {
+    @apply relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-400/20 to-blue-600/20 dark:from-blue-400/10 dark:to-blue-600/10;
+  }
+
+  /* Alert Card */
+  .alert-card {
+    @apply p-4 rounded-xl border-l-4 transition-all duration-300;
+  }
+
+  .alert-info {
+    @apply alert-card bg-blue-50 dark:bg-blue-900/20 border-blue-500;
+  }
+
+  .alert-warning {
+    @apply alert-card bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500;
+  }
+
+  .alert-danger {
+    @apply alert-card bg-red-50 dark:bg-red-900/20 border-red-500;
+  }
+
+  /* Floating Action Button */
+  .fab {
+    @apply fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full shadow-xl shadow-blue-500/40 hover:shadow-2xl hover:shadow-blue-500/50 hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center z-50;
+  }
+}
+
+/* ==========================================
+   Utility Styles
+   ========================================== */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500;
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-yellow-500;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Weather Animation Backgrounds */
+  .weather-bg-sunny {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #f59e0b 100%);
+  }
+
+  .weather-bg-rainy {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #3b82f6 100%);
+  }
+
+  .weather-bg-cloudy {
+    background: linear-gradient(135deg, #6b7280 0%, #9ca3af 50%, #6b7280 100%);
+  }
+
+  .weather-bg-storm {
+    background: linear-gradient(135deg, #1e3a5f 0%, #3730a3 50%, #1e1b4b 100%);
+  }
+
+  .weather-bg-night {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  }
+}
+
+/* ==========================================
+   Leaflet Overrides
+   ========================================== */
+.leaflet-container {
+  @apply rounded-2xl;
+  height: 100%;
+  width: 100%;
+}
+
+/* ==========================================
+   Animations
+   ========================================== */
+.weather-pulse {
+  animation: weatherPulse 2s ease-in-out infinite;
+}
+
+@keyframes weatherPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Rain drops animation */
+.rain-drop {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(transparent, rgba(255,255,255,0.8));
+  animation: rainFall linear infinite;
+}
+
+@keyframes rainFall {
+  0% { transform: translateY(-100px) scaleY(1); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100vh) scaleY(0.5); opacity: 0; }
+}
+
+/* Floating clouds */
+.cloud {
+  @apply absolute opacity-20 dark:opacity-10;
+  animation: cloudFloat 20s linear infinite;
+}
+
+@keyframes cloudFloat {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100vw); }
+}

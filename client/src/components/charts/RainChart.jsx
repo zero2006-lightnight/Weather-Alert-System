@@ -1,0 +1,90 @@
+import { useRef } from 'react';
+import { motion } from 'framer-motion';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { useTheme } from '../../context/ThemeContext';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+
+const RainChart = ({ data, loading }) => {
+  const { isDark } = useTheme();
+  const chartRef = useRef(null);
+
+  const chartData = {
+    labels: data?.map((d) => {
+      const date = new Date(d.time);
+      return `${date.getHours()}:00`;
+    }) || [],
+    datasets: [
+      {
+        label: 'Pressure (hPa)',
+        data: data?.map((d) => d.pressure || 0) || [],
+        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+        borderColor: '#3b82f6',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: isDark ? '#1f2937' : '#fff',
+        titleColor: isDark ? '#fff' : '#111',
+        bodyColor: isDark ? '#d1d5db' : '#374151',
+        borderColor: isDark ? '#374151' : '#e5e7eb',
+        borderWidth: 1,
+        cornerRadius: 12,
+        padding: 12,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          color: isDark ? '#9ca3af' : '#6b7280',
+          maxTicksLimit: 8,
+        },
+      },
+      y: {
+        grid: {
+          color: isDark ? 'rgba(75, 85, 99, 0.3)' : 'rgba(156, 163, 175, 0.2)',
+        },
+        ticks: {
+          color: isDark ? '#9ca3af' : '#6b7280',
+        },
+        beginAtZero: true,
+      },
+    },
+  };
+
+  if (loading) {
+    return (
+      <div className="glass-card p-6">
+        <div className="skeleton h-5 w-40 mb-4" />
+        <div className="skeleton h-48 w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="glass-card p-6"
+    >
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+        🌡️ Pressure Trend
+      </h3>
+      <div className="h-48">
+        <Bar ref={chartRef} data={chartData} options={options} />
+      </div>
+    </motion.div>
+  );
+};
+
+export default RainChart;
